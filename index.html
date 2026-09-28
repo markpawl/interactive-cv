@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mark Pawlowski — Resume - x</title>
+<title>Mark Pawlowski — Resume</title>
 <style>
   :root {
     --base-color: #1d1d1f;
@@ -651,7 +651,7 @@
 
   .cv-page {
     max-width: 820px;
-    margin: 0 auto;
+    margin: 0;              /* left-aligned, in line with the header and tabs */
     padding: 0 48px calc(48px + env(safe-area-inset-bottom, 0px));
   }
   .cv-page > h2:first-child { margin-top: 14px; }
@@ -670,11 +670,11 @@
   .cv-meta a:hover { color: var(--base-color); text-decoration: underline; }
   .cv-meta-inner {
     max-width: 820px;
-    margin: 0 auto;
+    margin: 0;              /* left-aligned, in line with the header and tabs */
     padding: 4px 48px;
     font-size: 12px;
     line-height: 1.4;
-    text-align: center;
+    text-align: left;
   }
 
   .cv-page h2 {
@@ -889,160 +889,9 @@
   </article>
 </div>
 
-<!-- ===================== PAGE TEXT (edit here) =====================
-     All text of the "Job Specific Qualifications" tab lives in the JSON block
-     below. Read the _readme notes at the top of the block before editing.
-     ================================================================== -->
-<script type="application/json" id="resume-data">
-{
-  "_readme": [
-    "This block holds all the text of the 'Job Specific Qualifications' tab. Edit the text here; the page builds itself from it every time it loads.",
-    "JSON rules: keep the double quotes around every text value, put a comma after every item in a list except the last one, and do not add comments. Inside text, avoid double quotes (use single quotes or curly quotes instead); if you really need one, put a backslash in front of it.",
-    "Formatting inside any text value: **double asterisks** make bold, a line break is typed as a backslash followed by the letter n, and a link is written as {label|https://example.com}. Email links work too: {name|mailto:you@example.com}.",
-    "hover = the text shown in the Details box when that title or bullet is clicked. Write na (or leave the quotes empty) when there is no hover text; that item then shows the 'no extra information' message when clicked.",
-    "sectionOrder = the order of the sections on the page and in the Background list. Move a line up or down to reorder. Every id listed must exist in the sections block below; a section that is defined but not listed is simply hidden.",
-    "Section type: standard (clickable title and bullets with hover text) or links (bullets are plain links; each one needs a url instead of hover).",
-    "Avoid writing a closing script tag inside any text."
-  ],
-
-  "header": {
-    "pageTitle": "Mark Pawlowski — Resume",
-    "name": "Mark Pawlowski",
-    "tagline": "Technical Writer, Courseware Developer, and Trainer with 16+ years of experience writing technical courses on application development topics. Self-Learner and demystifier of all things complex.",
-    "contact": [
-      "{markpaw@gmail.com|mailto:markpaw@gmail.com}",
-      "+49 15224193650",
-      "Hamburg, Germany"
-    ],
-    "status": "US citizen | Holding a valid German Work Visa."
-  },
-
-  "tabs": {
-    "main": "Job Specific Qualifications",
-    "cv": "Traditional CV"
-  },
-
-  "labels": {
-    "navHeading": "Background",
-    "hoverPrompt": "Click for related information!",
-    "emptyMessageDesktop": "Click a title or bullet in the document for more information.",
-    "emptyMessageTouch": "Tap a title or bullet for more information.",
-    "noInfoMessage": "No extra information for this item."
-  },
-
-  "sectionOrder": [
-    "documentation",
-    "ai-tools",
-    "studio-recording",
-    "operating-systems",
-    "music-gear",
-    "app-development",
-    "websites"
-  ],
-
-  "sections": {
-    "documentation": {
-      "type": "standard",
-      "title": "Documentation",
-      "hover": "na",
-      "intro": "Spent 15 years researching, designing, authoring, and delivering technical courseware and training across a wide range of topics related to front and back end application development and deployment.",
-      "bullets": [
-        { "text": "Authored and maintained dozens of courses on software development topics.", "hover": "Course developed include - React, Node.js, Java Spring Boot, Docker, Kubernetes, and AWS services." },
-        { "text": "Developed step-by-step hands-on lab instructions", "hover": "50% of the delivery time for each course is devoted to hands-on training based on these lab instructions." },
-        { "text": "Authored and delivered technical webinars.", "hover": "The webinars were created and delivered for a training company in support of their marketing efforts." },
-        { "text": "Authored blog posts on technical topics", "hover": "Blogs were posted to the training company's website." },
-        { "text": "Developed pre/post assessment tests.", "hover": "The tests evaluated student's topic knowledge before and after taking a class." }
-      ]
-    },
-
-    "ai-tools": {
-      "type": "standard",
-      "title": "AI Tools",
-      "hover": "na",
-      "intro": "I user modern AI tools every day in writing, coding, image generation, voice generation, documentation and course development workflows.",
-      "bullets": [
-        { "text": "Uses AI for everything", "hover": "na" },
-        { "text": "AI tools used include: Claude, Claude Code, Gemini, and ChatGPT", "hover": "na" },
-        { "text": "Al media generation tools used include: ElevenLabs, Gamma, Ideogram,  Photoroom, ...", "hover": "na" }
-      ]
-    },
-
-    "studio-recording": {
-      "type": "standard",
-      "title": "Studio & Recording",
-      "hover": "na",
-      "intro": "Earlier in my career I worked as a recording engineer at recording studios in the NYC area. Recent audio engineering includes work on my own music.",
-      "bullets": [
-        { "text": "I've been using Logic Pro for more than 10 years", "hover": "Recorded my album \"Just Like That\" entirely in Logic." },
-        { "text": "I'm also familiar with other DAW's including: Pro-Tools, Reaper, Ableton Live, Studio One, EnergyXT, and others.", "hover": "Out of the bunch, Logic is the most complete, easy to use, and musical option." },
-        { "text": "Recorded and mixed album of my own titled \"Just List That\"", "hover": "The album {'Just Like That'|https://music.apple.com/us/album/just-like-that/1514534686} is available on Apple Music and other streaming services." },
-        { "text": "Professional recording studio experience", "hover": "For my profesional album credits see {Discogs.com|https://www.discogs.com/artist/832778-Mark-Pawlowski}" }
-      ]
-    },
-
-    "operating-systems": {
-      "type": "standard",
-      "title": "Operating Systems",
-      "hover": "I am fully experienced and capable on all the major operating systems.",
-      "intro": "I have experience working across Apple, Windows, and Linux environments.",
-      "bullets": [
-        { "text": "MacBook Air M1", "hover": "My MacBook Air M1 is the latest of many Mac computers I've owned and worked with." },
-        { "text": "Windows laptop (LG Gram)", "hover": "I also work with this Windows 11 machine." },
-        { "text": "Linux (Ubuntu)", "hover": "I work mostly with Ubuntu on virtual machines or through the WSL (windows subsystem for linux) on Windows." }
-      ]
-    },
-
-    "music-gear": {
-      "type": "standard",
-      "title": "Music Gear",
-      "hover": "Just for fun, here's a list of some of my music gear.",
-      "intro": "I maintain a collection of guitars, amps, modeling, recording and performing gear for my personal use as an audio engineer and singer-songwriter.",
-      "bullets": [
-        { "text": "Fender Telecaster, Black (~1985 MIM), guitar", "hover": "This guitar plays and sounds great. I bought it at a really cool music store - {Parkway Music|https://parkwaymusic.com/} in Albany, NY." },
-        { "text": "PRS Single Cut, HH, guitar", "hover": "I was planning to get a PRS SE Custom 24 but this Single Cut model felt better when I played it. It was purchased at Sam Ash in Paramus, NJ." },
-        { "text": "Yamaha THR10 desktop amp and modeler", "hover": "This tabletop amp is really easy to use and sounds amazing. I bought it used from some guy on eBay." },
-        { "text": "IK Multimedia iLoud Micro Monitors", "hover": "First heard these at a studio in NYC. I heard them before I saw them and right away I knew I had to get them." },
-        { "text": "Event 20/20 passive monitors", "hover": "These monitors really sound good. The ones I have are passive (the powered ones had not been releasd yet.)" },
-        { "text": "Valeton GP-200 multi-effect floorboard processor", "hover": "I got this to use at some gigs I had planned. It sounds great. I could patch it right into the PA system if needed. It lets me leave the big pedalboard at home." },
-        { "text": "Valeton mini amp modeling stompbox", "hover": "I got this because it sounds just like the big floorboard version, is easier to work with for recording and was dirt cheap." },
-        { "text": "Boss Katana 100 amp", "hover": "Its a modeling amp that has actual knobs, wow! You can dial in great sounds without ever touching an editor program. Its also good as an FRFR amp for the Valeton gear." },
-        { "text": "Positive Grid Spark Mini amp", "hover": "This thing sounds great, is portable, is rechargeable, etc. One downside though is that it has too few physical controls - a gain control would have been nice. I tried the larger Spark amp but it sounded boxy no matter which patch its on." },
-        { "text": "... and lots of other stuff", "hover": "Add list here..." }
-      ]
-    },
-
-    "app-development": {
-      "type": "standard",
-      "title": "App Development",
-      "hover": "Applications I've designed and implemented on my own time.",
-      "intro": "I've created applications to support live shows and for streaming music.",
-      "bullets": [
-        { "text": "Event Fan facing app to accompany and enhance live show experience", "hover": "Fans seem to like it a lot. Click {HERE|https://markpawl-events.vercel.app/} to try it out." },
-        { "text": "Fairstream Artist-Centric Streaming Music Platform", "hover": "Still in the POC stage. Includes a server that artists can use to stream their music and client app they can distribute to fans." }
-      ]
-    },
-
-    "websites": {
-      "type": "links",
-      "title": "Websites",
-      "hover": "na",
-      "intro": "Related web sites.",
-      "bullets": [
-        { "text": "MarkPawl.com", "url": "https://www.markpawl.com/" },
-        { "text": "LinkedIn", "url": "https://www.linkedin.com/in/markpawl/" },
-        { "text": "GitHub", "url": "http://github.com/markpawl" },
-        { "text": "Music Event App", "url": "https://markpawl-events.vercel.app/" },
-        { "text": "Album Credits", "url": "https://www.discogs.com/artist/832778-Mark-Pawlowski" },
-        { "text": "My Apple Music Page", "url": "https://music.apple.com/us/album/just-like-that/1514534686" },
-        { "text": "My BandCamp Page", "url": "https://markpaw.bandcamp.com/album/just-like-that" }
-      ]
-    }
-  }
-}
-</script>
-
+<!-- Page text lives in resume-content.json (same folder as this file). Edit that file, not this one. -->
 <script>
-(function () {
+(async function () {
   "use strict";
 
   // ---------- Load the page text from the embedded JSON ----------
@@ -1065,10 +914,31 @@
     if (layout) layout.style.display = "none";
   }
 
-  function loadContent() {
-    const el = document.getElementById("resume-data");
-    if (!el) throw new Error("The JSON block (script id=\"resume-data\") is missing from the page.");
-    const raw = el.textContent;
+  const CONTENT_URL = "resume-content.json";
+
+  async function readContentText() {
+    // Preview builds embed the JSON in the page; the real site fetches the file.
+    const embedded = document.getElementById("resume-data");
+    if (embedded) return embedded.textContent;
+
+    if (window.location.protocol === "file:") {
+      throw new Error("Browsers don't let a page opened straight from disk (file://) read " + CONTENT_URL + "." +
+        "\nView the site through a web server instead: run  python3 -m http.server  in this folder and open http://localhost:8000 , or deploy it.");
+    }
+    let res;
+    try {
+      res = await fetch(CONTENT_URL, { cache: "no-cache" });   // always check for a newer copy
+    } catch (e) {
+      throw new Error("Couldn't fetch " + CONTENT_URL + " (network error). Check that the file is in the same folder as index.html.");
+    }
+    if (!res.ok) {
+      throw new Error("Couldn't load " + CONTENT_URL + " (HTTP " + res.status + "). Check that the file is in the same folder as index.html and is named exactly that.");
+    }
+    return res.text();
+  }
+
+  async function loadContent() {
+    const raw = await readContentText();
     let data;
     try {
       data = JSON.parse(raw);
@@ -1077,10 +947,9 @@
       const m = /position (\d+)/.exec(e.message);
       if (m && !/line/i.test(e.message)) {
         const line = raw.slice(0, Number(m[1])).split("\n").length;
-        hint = " (around line " + line + " of the JSON block, counting from its first line)";
+        hint = " (around line " + line + " of " + CONTENT_URL + ")";
       }
-      throw new Error("There is a JSON syntax mistake: " + e.message + hint +
-        "\nLine numbers count the line with the opening <script type=\"application/json\"> tag as line 1." +
+      throw new Error("There is a JSON syntax mistake in " + CONTENT_URL + ": " + e.message + hint +
         "\nCommon causes: a missing or extra comma, a missing closing quote, or a double quote inside text.");
     }
 
@@ -1174,7 +1043,7 @@
 
   let content;
   try {
-    content = loadContent();
+    content = await loadContent();
   } catch (err) {
     showFatal(err.message);
     return;
