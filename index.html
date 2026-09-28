@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mark Pawlowski — Resume</title>
+<style>
+  :root {
+    --base-color: #1d1d1f;
+    --border-color: #e6e6e6;
+    --panel-border: #d2d2d7;
+    --emphasis-color: #555;
+    --footer-color: #86868b;
+    --link-color: #007aff;
+    --hero-start: #ffffff;
+    --hero-stop: #f5f5f7;
+    --highlight-bg: rgba(0, 122, 255, 0.07);
+    --highlight-border: #007aff;
+    --panel-bg: #f5f5f7;
+    --page-bg: #ffffff;
+    --tab-accent: #6f9ac6; /* soft steel blue, distinct from the link/highlight blue */
+    --band-text: #48484a;    /* dark grey PDF link text */
+    --tri-bg: rgba(0, 0, 0, 0.07);            /* circle behind the triangle */
+    --tri-bg-hover: rgba(0, 0, 0, 0.12);
+    --tri-blink: rgba(0, 122, 255, 0.55);     /* circle colour at the peak of the blink */
+    --tab-bg: #e4eefa;       /* unselected tab: light blue */
+    --tab-bg-hover: #d5e5f7;
+    --tab-border: #c5d9f0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: var(--base-color);
+    background: #ffffff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  a { color: var(--link-color); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---------- Header ---------- */
+  header.page-header {
+    flex: 0 0 auto;
+    background: linear-gradient(180deg, var(--hero-start) 0%, var(--hero-stop) 100%);
+    --hpad: 48px;
+    padding: 22px var(--hpad) 0;
+  }
+
+  header.page-header h1 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.014em;
+    line-height: 1.1;
+    color: var(--base-color);
+  }
+
+  /* Name = collapsible section toggle */
+  .name-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .name-toggle:focus-visible {
+    outline: 2px solid var(--link-color);
+    outline-offset: 4px;
+  }
+
+  /* Triangle sits in a borderless circle; the circle's background is what blinks. */
+  .tri-wrap {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--tri-bg);
+    transition: background-color 0.15s ease;
+  }
+  .name-toggle:hover .tri-wrap { background: var(--tri-bg-hover); }
+
+  .name-toggle .tri {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    color: var(--footer-color);
+    transition: transform 0.18s ease, color 0.15s ease;
+  }
+  .name-toggle:hover .tri { color: var(--base-color); }
+  .name-toggle[aria-expanded="true"] .tri { transform: rotate(90deg); }
+
+  /* After the auto-close, blink the circle for 3 seconds (5 x 0.6s) to show
+     that the section can be reopened. */
+  .tri-wrap.blink {
+    animation: tri-blink 0.6s ease-in-out 5;
+  }
+  .tri-wrap.blink .tri { color: var(--base-color); }
+  @keyframes tri-blink {
+    0%, 100% { background: var(--tri-bg); }
+    50%      { background: var(--tri-blink); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tri-wrap.blink { animation: none; }
+  }
+
+  .bio {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.2s ease, visibility 0s linear 0.2s;
+  }
+  .bio.open {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.2s ease, visibility 0s linear 0s;
+  }
+  .bio-inner { overflow: hidden; min-height: 0; }
+  .bio-inner p:not(.bio-status) {
+    margin: 8px 0 0 36px;
+    max-width: 68ch;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--emphasis-color);
+  }
+
+  .contact-row {
+    margin: 8px 0 0 36px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    column-gap: 18px;
+    font-size: 14px;
+    color: var(--emphasis-color);
+  }
+
+  .contact-row span.sep {
+    color: var(--panel-border);
+  }
+
+  .contact-row a { color: var(--link-color); }
+
+  .bio-status {
+    margin: 6px 0 0 36px;
+    font-size: 14px;
+    color: var(--emphasis-color);
+  }
+
+  /* Tab selector on the bottom edge of the header. The tab bar draws the
+     full-width baseline; the selected tab sits on top of it and blends into
+     the page below, like a folder tab. */
+  .tabbar {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    margin: 14px calc(-1 * var(--hpad)) 0;
+    padding: 0 var(--hpad);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabbar::-webkit-scrollbar { display: none; }
+  .tabbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--border-color);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .tab {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 5px 10px 6px;
+    border: 1px solid var(--tab-border);
+    border-bottom: 1px solid transparent;
+    border-radius: 8px 8px 0 0;
+    background: var(--tab-bg);
+    font: inherit;
+    font-size: 11.6px; /* 80% of the previous 14.5px */
+    font-weight: 500;
+    color: var(--emphasis-color);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  /* Reserve the bold width so tabs don't change size when selected. */
+  .tab::after {
+    content: attr(data-text);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    font-weight: 700;
+  }
+  .tab:hover {
+    color: var(--base-color);
+    background: var(--tab-bg-hover);
+  }
+  .tab[aria-selected="true"] {
+    z-index: 3;
+    background: var(--page-bg);
+    border-color: var(--panel-border);
+    border-top-color: var(--tab-accent);
+    border-bottom-color: var(--page-bg);
+    box-shadow: inset 0 2px 0 var(--tab-accent); /* 3px accent bar across the top */
+    color: var(--base-color);
+    font-weight: 700;
+  }
+  .tab:focus-visible {
+    outline: 2px solid var(--link-color);
+    outline-offset: -3px;
+  }
+
+  /* Shown when the embedded JSON can't be read */
+  #data-error {
+    margin: 0;
+    padding: 14px 20px;
+    background: #fff1f0;
+    border-bottom: 1px solid #f5b5b0;
+    color: #8a1c14;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  #data-error strong { display: block; margin-bottom: 4px; }
+
+  /* ---------- Main layout ---------- */
+  main.layout {
+    flex: 1 1 auto;
+    display: flex;
+    min-height: 0; /* allow children to scroll */
+  }
+
+  /* Left: scrollable document */
+  #doc-scroll {
+    width: 70%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 56px 120px;
+    scroll-padding-top: 12px;
+  }
+
+  #doc-scroll section.resume-section {
+    max-width: 720px;
+    padding-top: 20px;
+  }
+
+  #doc-scroll section.resume-section:first-of-type {
+    padding-top: 16px;
+  }
+
+  #doc-scroll section.resume-section + section.resume-section {
+    border-top: 1px solid var(--border-color);
+    margin-top: 4px;
+  }
+
+  h2.section-title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    padding: 3px 10px 3px 14px;
+    margin-left: -14px;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  h2.section-title.clickable {
+    cursor: pointer;
+  }
+
+  h2.section-title.clickable:hover {
+    background-color: rgba(0,0,0,0.035);
+  }
+
+  h2.section-title { cursor: pointer; }
+  h2.section-title:hover { background-color: rgba(0,0,0,0.035); }
+
+  h2.section-title.selected {
+    background-color: var(--highlight-bg);
+    border-left-color: var(--highlight-border);
+  }
+
+  p.section-intro {
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--emphasis-color);
+    margin: 0 0 10px;
+    max-width: 68ch;
+  }
+
+  ul.bullet-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul.bullet-list li {
+    position: relative;
+    font-size: 14.5px;
+    line-height: 1.35;
+    color: var(--base-color);
+    padding: 4px 10px 4px 24px;
+    margin-left: -10px;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  ul.bullet-list li::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 13px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--panel-border);
+  }
+
+  ul.bullet-list li.clickable {
+    cursor: pointer;
+  }
+
+  ul.bullet-list li.clickable:hover {
+    background-color: rgba(0,0,0,0.035);
+  }
+
+  ul.bullet-list li { cursor: pointer; }
+  ul.bullet-list li:hover { background-color: rgba(0,0,0,0.035); }
+
+  ul.bullet-list li.link-item {
+    cursor: default;
+  }
+
+  ul.bullet-list li.link-item:hover {
+    background-color: transparent;
+  }
+
+  ul.bullet-list li.selected {
+    background-color: var(--highlight-bg);
+    border-left-color: var(--highlight-border);
+  }
+
+  ul.bullet-list li.selected,
+  ul.bullet-list li.clickable.selected:hover,
+  ul.bullet-list li.selected:hover,
+  h2.section-title.clickable.selected:hover,
+  h2.section-title.selected:hover {
+    background-color: var(--highlight-bg);
+  }
+
+  ul.bullet-list li.selected::before {
+    background: var(--highlight-border);
+  }
+
+  /* ---------- Right column ---------- */
+  aside.side-rail {
+    width: 30%;
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto; /* safety net only, for extremely short windows */
+    background: #ffffff;
+  }
+
+  .rail-nav {
+    flex: 0 0 auto; /* always as tall as its full list; never scrolls */
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .rail-nav h3, .rail-info h3 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--footer-color);
+    text-transform: uppercase;
+  }
+
+  nav.section-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav.section-nav li {
+    margin: 0;
+  }
+
+  nav.section-nav a {
+    display: block;
+    padding: 4px 8px;
+    margin-left: -8px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--base-color);
+    border-left: 2px solid transparent;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  nav.section-nav a:hover {
+    background-color: rgba(0,0,0,0.035);
+    text-decoration: none;
+  }
+
+  nav.section-nav a.active {
+    color: var(--link-color);
+    border-left-color: var(--highlight-border);
+    background-color: var(--highlight-bg);
+    font-weight: 500;
+  }
+
+  .rail-info {
+    flex: 0 1 auto; /* sits directly under the nav, only as tall as its text */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 12px 14px 14px;
+  }
+
+  #info-box {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+  }
+
+  #info-box .placeholder-msg {
+    margin: auto;
+    text-align: center;
+    color: var(--footer-color);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+
+  #info-box .placeholder-msg.hover-msg {
+    color: var(--link-color);
+  }
+
+  #info-box.has-info {
+    background: var(--highlight-bg);
+    border-color: var(--highlight-border);
+  }
+
+  #info-box .info-content {
+    margin: auto 0;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--base-color);
+  }
+
+  #info-box .info-content .info-kicker {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--footer-color);
+    margin-bottom: 6px;
+  }
+
+  #info-box .info-content a {
+    word-break: break-word;
+  }
+
+  /* Scrollbars, subtle */
+  #doc-scroll::-webkit-scrollbar,
+  .rail-nav::-webkit-scrollbar,
+  #info-box::-webkit-scrollbar {
+    width: 8px;
+  }
+  #doc-scroll::-webkit-scrollbar-thumb,
+  .rail-nav::-webkit-scrollbar-thumb,
+  #info-box::-webkit-scrollbar-thumb {
+    background: #d2d2d7;
+    border-radius: 8px;
+  }
+  #doc-scroll::-webkit-scrollbar-track,
+  .rail-nav::-webkit-scrollbar-track,
+  #info-box::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* ---------- Responsive fallback ----------
+     This breakpoint is intentionally narrow (well below any normal desktop
+     browser window width) so the right-hand panel stays visible and fixed
+     on desktop at all times, and only stacks on genuinely small/mobile
+     viewports. */
+  @media (max-width: 600px) {
+    @supports (height: 100dvh) {
+      html, body { height: 100dvh; }
+    }
+
+    body { padding-bottom: 0; }
+
+    /* Compact header */
+    header.page-header { --hpad: 16px; padding: 12px var(--hpad) 0; }
+    header.page-header h1 { font-size: 24px; }
+    .tri-wrap { width: 24px; height: 24px; }
+    .name-toggle .tri { width: 12px; height: 12px; }
+    .bio-inner p:not(.bio-status) { margin-left: 32px; font-size: 14px; }
+    .bio-status { margin: 4px 0 0 32px; font-size: 13px; }
+    .contact-row { margin: 6px 0 0 32px; column-gap: 10px; font-size: 13px; }
+    .tabbar { margin-top: 8px; }
+    .tab { font-size: 10.8px; /* 80% of 13.5px */ padding: 4px 8px 5px; }
+
+    /* Stack: single-row chip nav on top, scrolling document in the middle,
+       details panel pinned to the bottom like a footer. The aside wrapper is
+       dissolved so its two panels can be ordered independently. */
+    main.layout { flex-direction: column; }
+    aside.side-rail { display: contents; }
+
+    .rail-nav {
+      order: -1;
+      flex: 0 0 auto;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: #ffffff;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-color);
+      scrollbar-width: none;
+    }
+    .rail-nav::-webkit-scrollbar { display: none; }
+    .rail-nav h3 { display: none; }
+
+    /* One row tall: all items laid out horizontally in a scrolling strip */
+    nav.section-nav ul { display: flex; flex-wrap: nowrap; gap: 6px; width: max-content; }
+    nav.section-nav a {
+      white-space: nowrap;
+      padding: 6px 12px;
+      margin-left: 0;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      background: var(--panel-bg);
+      font-size: 13.5px;
+    }
+    nav.section-nav a.active {
+      background: var(--highlight-bg);
+      border-color: var(--highlight-border);
+    }
+
+    #doc-scroll {
+      order: 0;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+      padding: 0 16px calc(var(--footer-h, 64px) + 16px);
+    }
+    #doc-scroll section.resume-section { max-width: none; }
+
+    /* Roomier tap targets */
+    ul.bullet-list li { font-size: 15px; line-height: 1.4; padding: 8px 10px 8px 24px; }
+    ul.bullet-list li::before { top: 16px; }
+    h2.section-title { font-size: 21px; padding-top: 6px; padding-bottom: 6px; }
+
+    /* Pinned to the bottom of the screen (not the end of the document),
+       always visible like an app footer. */
+    .rail-info {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
+      max-height: 35vh; /* long text scrolls inside the box instead of growing */
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--border-color);
+      background: #ffffff;
+      box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  /* Touch devices have no hover: avoid "sticky" hover backgrounds after a tap
+     and suppress the tap flash. */
+  @media (hover: none) {
+    ul.bullet-list li,
+    h2.section-title { -webkit-tap-highlight-color: transparent; }
+    ul.bullet-list li:not(.selected):hover,
+    h2.section-title:not(.selected):hover { background-color: transparent; }
+    nav.section-nav a:not(.active):hover { background-color: transparent; }
+  }
+
+  /* Belt-and-suspenders: on any desktop-class width, force the two-column,
+     fixed-right-panel layout regardless of the rule above. */
+  @media (min-width: 601px) {
+    main.layout { flex-direction: row !important; }
+    #doc-scroll { width: 70% !important; overflow-y: auto !important; }
+    aside.side-rail {
+      width: 30% !important;
+      display: flex !important;
+      border-left: 1px solid var(--border-color);
+      border-top: none;
+    }
+  }
+
+
+  /* ---------- Traditional CV view (replaces the page contents) ---------- */
+  #cv-view {
+    display: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  body.cv-mode main.layout { display: none; }
+  body.cv-mode #cv-view { display: block; }
+
+  .cv-page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 48px calc(48px + env(safe-area-inset-bottom, 0px));
+  }
+  .cv-page > h2:first-child { margin-top: 14px; }
+
+
+
+  /* Light-grey band directly under the tab bar holding the PDF link */
+  .cv-meta {
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .cv-meta a {
+    color: var(--band-text);
+    text-decoration: none;
+  }
+  .cv-meta a:hover { color: var(--base-color); text-decoration: underline; }
+  .cv-meta-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 4px 48px;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .cv-page h2 {
+    margin: 28px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--footer-color);
+  }
+
+  .cv-skills { margin: 0; }
+  .cv-skills dt { margin: 12px 0 2px; font-size: 14px; font-weight: 600; }
+  .cv-skills dd { margin: 0; font-size: 14.5px; line-height: 1.55; }
+
+  ul.pipe-list { list-style: none; margin: 0; padding: 0; display: inline; }
+  /* Items never split mid-name; lines only break between items. */
+  ul.pipe-list li { display: inline-block; white-space: nowrap; }
+  ul.pipe-list li:not(:last-child)::after {
+    content: "|";
+    margin: 0 0.55em;
+    color: var(--panel-border);
+  }
+
+  .cv-job { margin-top: 18px; }
+  .cv-job h3 { margin: 0; font-size: 16px; font-weight: 600; }
+  .cv-org { margin: 2px 0 0; font-size: 14px; color: var(--footer-color); }
+  .cv-focus { margin: 8px 0 6px; font-size: 14.5px; line-height: 1.5; color: var(--emphasis-color); }
+  .cv-job ul.cv-bullets { margin: 6px 0 0; padding-left: 20px; }
+  .cv-job ul.cv-bullets li { margin: 3px 0; font-size: 14.5px; line-height: 1.5; }
+
+  .cv-fact { margin: 0; font-size: 14.5px; line-height: 1.55; }
+
+  @media (max-width: 600px) {
+    .cv-meta-inner { padding: 4px 16px; }
+    .cv-page { padding: 0 16px calc(32px + env(safe-area-inset-bottom, 0px)); }
+  }
+
+  @media print {
+    .tabbar { display: none; }
+    body.cv-mode #cv-view { overflow: visible; }
+    html, body { height: auto; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --base-color: #f5f5f7;
+      --border-color: #3a3a3c;
+      --panel-border: #48484a;
+      --emphasis-color: #a1a1a6;
+      --footer-color: #98989d;
+      --link-color: #2997ff;
+      --hero-start: #1c1c1e;
+      --hero-stop: #000000;
+      --highlight-bg: rgba(41, 151, 255, 0.12);
+      --panel-bg: #1c1c1e;
+      --page-bg: #000000;
+      --tab-accent: #9bb9da;
+      --band-text: #c7c7cc;
+      --tri-bg: rgba(255, 255, 255, 0.12);
+      --tri-bg-hover: rgba(255, 255, 255, 0.2);
+      --tri-blink: rgba(41, 151, 255, 0.65);
+      --tab-bg: rgba(41, 151, 255, 0.14);
+      --tab-bg-hover: rgba(41, 151, 255, 0.24);
+      --tab-border: #24405c;
+    }
+    html:not([data-theme="light"]) body { background: #000000; }
+    html:not([data-theme="light"]) aside.side-rail { background: #000000; }
+    @media (max-width: 600px) {
+      html:not([data-theme="light"]) .rail-info,
+      html:not([data-theme="light"]) .rail-nav { background: #000000; }
+    }
+    html:not([data-theme="light"]) ul.bullet-list li::before { background: #636366; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>
+    <button type="button" class="name-toggle" id="bio-toggle" aria-expanded="true" aria-controls="bio-panel">
+      <span class="tri-wrap" aria-hidden="true"><svg class="tri" viewBox="0 0 12 12"><path d="M3 1.5 L10 6 L3 10.5 Z" fill="currentColor"/></svg></span>
+      <span id="hdr-name"></span>
+    </button>
+  </h1>
+  <div class="bio open" id="bio-panel">
+    <div class="bio-inner">
+      <p id="hdr-tagline"></p>
+      <div class="contact-row" id="hdr-contact"></div>
+      <p class="bio-status" id="hdr-status"></p>
+    </div>
+  </div>
+  <div class="tabbar" role="tablist" aria-label="Resume views">
+    <button type="button" class="tab" id="tab-main" role="tab" aria-selected="true" data-text=""></button>
+    <button type="button" class="tab" id="tab-cv" role="tab" aria-selected="false" tabindex="-1" data-text=""></button>
+  </div>
+</header>
+
+<main class="layout">
+  <div id="doc-scroll"></div>
+
+  <aside class="side-rail">
+    <div class="rail-nav">
+      <h3 id="nav-heading"></h3>
+      <nav class="section-nav"><ul id="nav-list"></ul></nav>
+    </div>
+    <div class="rail-info">
+      <div id="info-box">
+        <div class="placeholder-msg" id="info-placeholder"></div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<div id="cv-view" role="region" aria-label="Traditional CV">
+  <div class="cv-meta">
+    <div class="cv-meta-inner">
+      <a href="mp-traditional-cv.pdf" target="_blank" rel="noopener">click here to download pdf copy</a>
+    </div>
+  </div>
+
+  <article class="cv-page">
+
+    <h2>Courseware Production &amp; Training Skills</h2>
+    <dl class="cv-skills">
+      <dt>Courseware Development</dt>
+      <dd><ul class="pipe-list"><li>Curriculum Design</li><li>Course Outlines</li><li>Self-Guided Learning Paths</li><li>Assessment Tests</li><li>Lab Development</li><li>Lab Environment Development</li><li>Technical Writing</li><li>LMS</li><li>ADDIE</li><li>Bloom's Taxonomy</li></ul></dd>
+
+      <dt>Training Delivery</dt>
+      <dd><ul class="pipe-list"><li>Instructor-Led</li><li>In-Person</li><li>Virtual</li><li>Train the Trainer</li><li>Webinar</li><li>Code Review</li><li>Capstone Projects</li><li>Zoom</li><li>WebEx</li><li>Goto Training</li><li>Google Meet</li><li>MS Teams</li></ul></dd>
+
+      <dt>Technical Writing</dt>
+      <dd><ul class="pipe-list"><li>Courseware</li><li>Lab Instructions</li><li>Assessment Questions</li><li>Webinars</li><li>Blog Posts, Tutorials</li><li>Coding Examples</li><li>Demo Applications</li></ul></dd>
+
+      <dt>Technical Skills Taught</dt>
+      <dd><ul class="pipe-list"><li>WebApp Development</li><li>React</li><li>JavaScript</li><li>TypeScript</li><li>Angular</li><li>HTML</li><li>CSS</li><li>Bootstrap</li><li>Server Development</li><li>REST APIs</li><li>Java</li><li>Spring Boot</li><li>Node.js</li><li>Python</li><li>CI/CD</li><li>Docker</li><li>Kubernetes</li><li>HELM</li><li>AWS</li><li>SQL</li><li>NoSQL</li></ul></dd>
+
+      <dt>Lab Environments &amp; Sandboxes</dt>
+      <dd><ul class="pipe-list"><li>VMs</li><li>Custom</li><li>Local</li><li>Cloud</li><li>Docker</li><li>Browser</li><li>Jupyter</li></ul></dd>
+
+      <dt>AI Creation Tools</dt>
+      <dd><ul class="pipe-list"><li>HeyGen (AI Avatars)</li><li>ElevenLabs (Voice Cloning &amp; TTS)</li><li>Canva AI</li><li>Gamma App</li><li>Photoroom</li><li>Grammarly</li></ul></dd>
+
+      <dt>AI Chat (LLM)</dt>
+      <dd><ul class="pipe-list"><li>Claude (Anthropic)</li><li>Gemini (Google)</li><li>ChatGPT (OpenAI)</li><li>Microsoft Copilot</li></ul></dd>
+    </dl>
+
+    <h2>Work Experience</h2>
+
+    <section class="cv-job">
+      <h3>Courseware Author, Trainer &amp; Subject Matter Expert</h3>
+      <p class="cv-org">2019 – Present &middot; Independent, West Hurley, USA &amp; Hamburg, Germany</p>
+      <p class="cv-focus">Focus: Architecting end-to-end technical training ecosystems&mdash;including curriculum design and hands-on labs&mdash;to upskill enterprise engineering teams in full-stack and cloud-native development.</p>
+      <ul class="cv-bullets">
+        <li>Design, develop, update, and improve technical courseware and instructor-led training materials covering React, Node.js, Java, AWS, and Kubernetes for enterprise engineering teams.</li>
+        <li>Choose optimal topics to cover and create learning assessments through skills-gap analysis.</li>
+        <li>Build production-grade full-stack reference applications and cloud-based lab environments to simulate real-world development scenarios for learners.</li>
+        <li>Design and implement validation and standardization practices for lab environments and materials.</li>
+        <li>Deliver live online training sessions, webinars, and technical workshops to maintain repeat engagements with enterprise clients.</li>
+        <li>Research, validate, and integrate modern technologies and AI-assisted development workflows into courseware to keep training content aligned with industry practices.</li>
+      </ul>
+    </section>
+
+    <section class="cv-job">
+      <h3>Technical Stream Lead, Developer, Consultant &amp; Trainer</h3>
+      <p class="cv-org">2016 – 2018 &middot; Web Age Solutions, Toronto, Canada</p>
+      <p class="cv-focus">Focus: Developing and managing enterprise training programs&mdash;including technical curriculum and lab infrastructure&mdash;for a major IT training provider, enabling technical upskilling of Fortune 500 software development teams.</p>
+      <ul class="cv-bullets">
+        <li>Led the technical courseware stream, ensuring content quality, technical accuracy, and alignment with real-world engineering practices.</li>
+        <li>Authored and maintained extensive training manuals (200–400 pages per course) covering React, Angular, Node.js, Java, AWS, Docker, and Kubernetes.</li>
+        <li>Designed and implemented full-stack training applications and lab environments to support hands-on learning across multiple technologies.</li>
+        <li>Improved lab reliability and deployment consistency by adopting containerized VMs &amp; Docker-based environments, reducing setup-related issues.</li>
+        <li>Delivered on-site and virtual technical training sessions for enterprise clients.</li>
+      </ul>
+    </section>
+
+    <section class="cv-job">
+      <h3>IT Trainer</h3>
+      <p class="cv-org">2010 – 2015 &middot; Independent, West Hurley, USA</p>
+      <p class="cv-focus">Focus: Delivering high-impact technical instruction and hands-on lab support to enterprise engineering teams, enabling them to deliver next-generation software development solutions.</p>
+      <ul class="cv-bullets">
+        <li>Developed and validated step-by-step technical labs to ensure consistent execution across training environments.</li>
+        <li>Reduced lab failure rates from common execution issues by ~30% through systematic validation and pre-run testing.</li>
+        <li>Created video-based training content to scale delivery and reduce dependency on in-person sessions.</li>
+      </ul>
+    </section>
+
+    <section class="cv-job">
+      <h3>Independent Consultant, Technical Trainer &amp; Product SME</h3>
+      <p class="cv-org">2000 – 2009</p>
+      <ul class="cv-bullets">
+        <li>Senior Mobile Software Engineer | Vettro Corp (NYC) | 2006 – 2008</li>
+        <li>Product Application Engineer | Solidtech (CA) | 2006 – 2007</li>
+        <li>Independent Consultant | Self-Employed | 2002 – 2004</li>
+        <li>Technical Product Consultant | PointBase | 2000 – 2002</li>
+      </ul>
+    </section>
+
+    <h2>Achievements</h2>
+    <p class="cv-fact">Delivered 200+ live technical training engagements to ~100 enterprise clients, reaching an estimated 2,000–3,000 developers (sustained avg. 4.5/5 student rating)</p>
+
+    <h2>Education</h2>
+    <p class="cv-fact">Bachelor of Science in Physics, Stony Brook University, Stony Brook, NY, USA</p>
+
+    <h2>Language Skills</h2>
+    <p class="cv-fact">English (Native / Mother tongue) | German (A1)</p>
+
+    <h2>Outside Interests</h2>
+    <p class="cv-fact">Songwriting | Hosting Parties | Mystery Novels | Language Studies</p>
+  </article>
+</div>
+
+<!-- ===================== PAGE TEXT (edit here) =====================
+     All text of the "Job Specific Qualifications" tab lives in the JSON block
+     below. Read the _readme notes at the top of the block before editing.
+     ================================================================== -->
+<script type="application/json" id="resume-data">
+{
+  "_readme": [
+    "This block holds all the text of the 'Job Specific Qualifications' tab. Edit the text here; the page builds itself from it every time it loads.",
+    "JSON rules: keep the double quotes around every text value, put a comma after every item in a list except the last one, and do not add comments. Inside text, avoid double quotes (use single quotes or curly quotes instead); if you really need one, put a backslash in front of it.",
+    "Formatting inside any text value: **double asterisks** make bold, a line break is typed as a backslash followed by the letter n, and a link is written as {label|https://example.com}. Email links work too: {name|mailto:you@example.com}.",
+    "hover = the text shown in the Details box when that title or bullet is clicked. Write na (or leave the quotes empty) when there is no hover text; that item then shows the 'no extra information' message when clicked.",
+    "sectionOrder = the order of the sections on the page and in the Background list. Move a line up or down to reorder. Every id listed must exist in the sections block below; a section that is defined but not listed is simply hidden.",
+    "Section type: standard (clickable title and bullets with hover text) or links (bullets are plain links; each one needs a url instead of hover).",
+    "Avoid writing a closing script tag inside any text."
+  ],
+
+  "header": {
+    "pageTitle": "Mark Pawlowski — Resume",
+    "name": "Mark Pawlowski",
+    "tagline": "Technical Writer, Courseware Developer, and Trainer with 16+ years of experience writing technical courses on application development topics. Self-Learner and demystifier of all things complex.",
+    "contact": [
+      "{markpaw@gmail.com|mailto:markpaw@gmail.com}",
+      "+49 15224193650",
+      "Hamburg, Germany"
+    ],
+    "status": "US citizen | Holding a valid German Work Visa."
+  },
+
+  "tabs": {
+    "main": "Job Specific Qualifications",
+    "cv": "Traditional CV"
+  },
+
+  "labels": {
+    "navHeading": "Background",
+    "hoverPrompt": "Click for related information!",
+    "emptyMessageDesktop": "Click a title or bullet in the document for more information.",
+    "emptyMessageTouch": "Tap a title or bullet for more information.",
+    "noInfoMessage": "No extra information for this item."
+  },
+
+  "sectionOrder": [
+    "documentation",
+    "ai-tools",
+    "studio-recording",
+    "operating-systems",
+    "music-gear",
+    "app-development",
+    "websites"
+  ],
+
+  "sections": {
+    "documentation": {
+      "type": "standard",
+      "title": "Documentation",
+      "hover": "na",
+      "intro": "Spent 15 years researching, designing, authoring, and delivering technical courseware and training across a wide range of topics related to front and back end application development and deployment.",
+      "bullets": [
+        { "text": "Authored and maintained dozens of courses on software development topics.", "hover": "Course developed include - React, Node.js, Java Spring Boot, Docker, Kubernetes, and AWS services." },
+        { "text": "Developed step-by-step hands-on lab instructions", "hover": "50% of the delivery time for each course is devoted to hands-on training based on these lab instructions." },
+        { "text": "Authored and delivered technical webinars.", "hover": "The webinars were created and delivered for a training company in support of their marketing efforts." },
+        { "text": "Authored blog posts on technical topics", "hover": "Blogs were posted to the training company's website." },
+        { "text": "Developed pre/post assessment tests.", "hover": "The tests evaluated student's topic knowledge before and after taking a class." }
+      ]
+    },
+
+    "ai-tools": {
+      "type": "standard",
+      "title": "AI Tools",
+      "hover": "na",
+      "intro": "I user modern AI tools every day in writing, coding, image generation, voice generation, documentation and course development workflows.",
+      "bullets": [
+        { "text": "Uses AI for everything", "hover": "na" },
+        { "text": "AI tools used include: Claude, Claude Code, Gemini, and ChatGPT", "hover": "na" },
+        { "text": "Al media generation tools used include: ElevenLabs, Gamma, Ideogram,  Photoroom, ...", "hover": "na" }
+      ]
+    },
+
+    "studio-recording": {
+      "type": "standard",
+      "title": "Studio & Recording",
+      "hover": "na",
+      "intro": "Earlier in my career I worked as a recording engineer at recording studios in the NYC area. Recent audio engineering includes work on my own music.",
+      "bullets": [
+        { "text": "I've been using Logic Pro for more than 10 years", "hover": "Recorded my album \"Just Like That\" entirely in Logic." },
+        { "text": "I'm also familiar with other DAW's including: Pro-Tools, Reaper, Ableton Live, Studio One, EnergyXT, and others.", "hover": "Out of the bunch, Logic is the most complete, easy to use, and musical option." },
+        { "text": "Recorded and mixed album of my own titled \"Just List That\"", "hover": "The album {'Just Like That'|https://music.apple.com/us/album/just-like-that/1514534686} is available on Apple Music and other streaming services." },
+        { "text": "Professional recording studio experience", "hover": "For my profesional album credits see {Discogs.com|https://www.discogs.com/artist/832778-Mark-Pawlowski}" }
+      ]
+    },
+
+    "operating-systems": {
+      "type": "standard",
+      "title": "Operating Systems",
+      "hover": "I am fully experienced and capable on all the major operating systems.",
+      "intro": "I have experience working across Apple, Windows, and Linux environments.",
+      "bullets": [
+        { "text": "MacBook Air M1", "hover": "My MacBook Air M1 is the latest of many Mac computers I've owned and worked with." },
+        { "text": "Windows laptop (LG Gram)", "hover": "I also work with this Windows 11 machine." },
+        { "text": "Linux (Ubuntu)", "hover": "I work mostly with Ubuntu on virtual machines or through the WSL (windows subsystem for linux) on Windows." }
+      ]
+    },
+
+    "music-gear": {
+      "type": "standard",
+      "title": "Music Gear",
+      "hover": "Just for fun, here's a list of some of my music gear.",
+      "intro": "I maintain a collection of guitars, amps, modeling, recording and performing gear for my personal use as an audio engineer and singer-songwriter.",
+      "bullets": [
+        { "text": "Fender Telecaster, Black (~1985 MIM), guitar", "hover": "This guitar plays and sounds great. I bought it at a really cool music store - {Parkway Music|https://parkwaymusic.com/} in Albany, NY." },
+        { "text": "PRS Single Cut, HH, guitar", "hover": "I was planning to get a PRS SE Custom 24 but this Single Cut model felt better when I played it. It was purchased at Sam Ash in Paramus, NJ." },
+        { "text": "Yamaha THR10 desktop amp and modeler", "hover": "This tabletop amp is really easy to use and sounds amazing. I bought it used from some guy on eBay." },
+        { "text": "IK Multimedia iLoud Micro Monitors", "hover": "First heard these at a studio in NYC. I heard them before I saw them and right away I knew I had to get them." },
+        { "text": "Event 20/20 passive monitors", "hover": "These monitors really sound good. The ones I have are passive (the powered ones had not been releasd yet.)" },
+        { "text": "Valeton GP-200 multi-effect floorboard processor", "hover": "I got this to use at some gigs I had planned. It sounds great. I could patch it right into the PA system if needed. It lets me leave the big pedalboard at home." },
+        { "text": "Valeton mini amp modeling stompbox", "hover": "I got this because it sounds just like the big floorboard version, is easier to work with for recording and was dirt cheap." },
+        { "text": "Boss Katana 100 amp", "hover": "Its a modeling amp that has actual knobs, wow! You can dial in great sounds without ever touching an editor program. Its also good as an FRFR amp for the Valeton gear." },
+        { "text": "Positive Grid Spark Mini amp", "hover": "This thing sounds great, is portable, is rechargeable, etc. One downside though is that it has too few physical controls - a gain control would have been nice. I tried the larger Spark amp but it sounded boxy no matter which patch its on." },
+        { "text": "... and lots of other stuff", "hover": "Add list here..." }
+      ]
+    },
+
+    "app-development": {
+      "type": "standard",
+      "title": "App Development",
+      "hover": "Applications I've designed and implemented on my own time.",
+      "intro": "I've created applications to support live shows and for streaming music.",
+      "bullets": [
+        { "text": "Event Fan facing app to accompany and enhance live show experience", "hover": "Fans seem to like it a lot. Click {HERE|https://markpawl-events.vercel.app/} to try it out." },
+        { "text": "Fairstream Artist-Centric Streaming Music Platform", "hover": "Still in the POC stage. Includes a server that artists can use to stream their music and client app they can distribute to fans." }
+      ]
+    },
+
+    "websites": {
+      "type": "links",
+      "title": "Websites",
+      "hover": "na",
+      "intro": "Related web sites.",
+      "bullets": [
+        { "text": "MarkPawl.com", "url": "https://www.markpawl.com/" },
+        { "text": "LinkedIn", "url": "https://www.linkedin.com/in/markpawl/" },
+        { "text": "GitHub", "url": "http://github.com/markpawl" },
+        { "text": "Music Event App", "url": "https://markpawl-events.vercel.app/" },
+        { "text": "Album Credits", "url": "https://www.discogs.com/artist/832778-Mark-Pawlowski" },
+        { "text": "My Apple Music Page", "url": "https://music.apple.com/us/album/just-like-that/1514534686" },
+        { "text": "My BandCamp Page", "url": "https://markpaw.bandcamp.com/album/just-like-that" }
+      ]
+    }
+  }
+}
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Load the page text from the embedded JSON ----------
+  const DEFAULT_LABELS = {
+    navHeading: "Background",
+    hoverPrompt: "Click for related information!",
+    emptyMessageDesktop: "Click a title or bullet in the document for more information.",
+    emptyMessageTouch: "Tap a title or bullet for more information.",
+    noInfoMessage: "No extra information for this item."
+  };
+
+  function showFatal(message) {
+    console.error("Resume data error: " + message);
+    const box = document.createElement("div");
+    box.id = "data-error";
+    box.setAttribute("role", "alert");
+    box.innerHTML = "<strong>The resume text couldn't be loaded.</strong>" + escapeHtml(message);
+    document.body.insertBefore(box, document.body.firstChild);
+    const layout = document.querySelector("main.layout");
+    if (layout) layout.style.display = "none";
+  }
+
+  function loadContent() {
+    const el = document.getElementById("resume-data");
+    if (!el) throw new Error("The JSON block (script id=\"resume-data\") is missing from the page.");
+    const raw = el.textContent;
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch (e) {
+      let hint = "";
+      const m = /position (\d+)/.exec(e.message);
+      if (m && !/line/i.test(e.message)) {
+        const line = raw.slice(0, Number(m[1])).split("\n").length;
+        hint = " (around line " + line + " of the JSON block, counting from its first line)";
+      }
+      throw new Error("There is a JSON syntax mistake: " + e.message + hint +
+        "\nLine numbers count the line with the opening <script type=\"application/json\"> tag as line 1." +
+        "\nCommon causes: a missing or extra comma, a missing closing quote, or a double quote inside text.");
+    }
+
+    function need(cond, msg) { if (!cond) throw new Error(msg); }
+    need(data && typeof data === "object", "The JSON must be an object.");
+    need(data.header && typeof data.header === "object", "\"header\" is missing.");
+    need(Array.isArray(data.sectionOrder), "\"sectionOrder\" must be a list of section ids.");
+    need(data.sections && typeof data.sections === "object", "\"sections\" is missing.");
+
+    const ids = new Set();
+    const sections = data.sectionOrder.map(function (key) {
+      need(typeof key === "string", "\"sectionOrder\" must contain only text ids.");
+      need(!ids.has(key), "\"sectionOrder\" lists \"" + key + "\" more than once.");
+      ids.add(key);
+      const sec = data.sections[key];
+      need(sec, "\"sectionOrder\" lists \"" + key + "\", but there is no section with that id under \"sections\".");
+      need(typeof sec.title === "string" && sec.title.trim(), "Section \"" + key + "\" needs a \"title\".");
+      need(Array.isArray(sec.bullets), "Section \"" + key + "\" needs a \"bullets\" list.");
+      const isLinks = sec.type === "links";
+      return {
+        id: "sec-" + key.replace(/[^A-Za-z0-9_-]/g, "-"),
+        title: sec.title,
+        hover: sec.hover,
+        intro: sec.intro || "",
+        isLinkList: isLinks,
+        bullets: sec.bullets.map(function (b, i) {
+          need(b && typeof b.text === "string", "Section \"" + key + "\", bullet " + (i + 1) + " needs \"text\".");
+          if (isLinks) {
+            need(typeof b.url === "string" && b.url.trim(), "Section \"" + key + "\" is a links section, so bullet " + (i + 1) + " needs a \"url\".");
+            return { text: b.text, href: b.url };
+          }
+          return { text: b.text, info: b.hover };
+        })
+      };
+    });
+
+    Object.keys(data.sections).forEach(function (key) {
+      if (!ids.has(key)) console.info("Section \"" + key + "\" is defined but not listed in sectionOrder, so it is hidden.");
+    });
+
+    return {
+      header: data.header,
+      tabs: data.tabs || {},
+      labels: Object.assign({}, DEFAULT_LABELS, data.labels || {}),
+      sections: sections
+    };
+  }
+
+  // ---------- Helpers ----------
+  // "na", "NA", empty text, or a missing value all mean "no hover text".
+  function isNa(val) {
+    const t = String(val == null ? "" : val).trim().toLowerCase();
+    return t === "" || t === "na";
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // Text -> safe HTML. Supports {label|url} links, **bold**, and line breaks.
+  function renderRich(raw) {
+    if (raw == null) return "";
+    let text = String(raw);
+    const tokens = [];
+
+    text = text.replace(/\{\s*([^{}|]+?)\s*\|\s*((?:https?:\/\/|mailto:|tel:)[^\s{}|]+)\s*\}/g,
+      function (m, label, url) {
+        const key = "\u0000" + tokens.length + "\u0000";
+        tokens.push({ label: label.trim(), url: url.trim() });
+        return key;
+      });
+
+    let out = escapeHtml(text);
+    out = out.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    out = out.replace(/\r?\n/g, "<br>");
+
+    tokens.forEach(function (tok, i) {
+      const key = "\u0000" + i + "\u0000";
+      const external = /^https?:/i.test(tok.url);
+      const anchor = '<a href="' + tok.url.replace(/"/g, "&quot;") + '"' +
+        (external ? ' target="_blank" rel="noopener"' : "") + ">" + escapeHtml(tok.label) + "</a>";
+      out = out.split(key).join(anchor);
+    });
+
+    return out;
+  }
+
+  let content;
+  try {
+    content = loadContent();
+  } catch (err) {
+    showFatal(err.message);
+    return;
+  }
+  const sections = content.sections;
+  const labels = content.labels;
+
+  // ---------- Fill in the header, tabs and labels ----------
+  (function renderHeader() {
+    const h = content.header;
+    if (h.pageTitle) document.title = h.pageTitle;
+    document.getElementById("hdr-name").textContent = h.name || "";
+    document.getElementById("hdr-tagline").innerHTML = renderRich(h.tagline);
+    document.getElementById("hdr-status").innerHTML = renderRich(h.status);
+
+    const contact = document.getElementById("hdr-contact");
+    (Array.isArray(h.contact) ? h.contact : []).forEach(function (item, i) {
+      if (i > 0) {
+        const sep = document.createElement("span");
+        sep.className = "sep";
+        sep.innerHTML = "&middot;";
+        contact.appendChild(sep);
+      }
+      const span = document.createElement("span");
+      span.innerHTML = renderRich(item);
+      contact.appendChild(span);
+    });
+
+    const mainLabel = content.tabs.main || "Job Specific Qualifications";
+    const cvLabel = content.tabs.cv || "Traditional CV";
+    const tm = document.getElementById("tab-main");
+    const tc = document.getElementById("tab-cv");
+    tm.textContent = mainLabel; tm.dataset.text = mainLabel;
+    tc.textContent = cvLabel;   tc.dataset.text = cvLabel;
+
+    document.getElementById("nav-heading").textContent = labels.navHeading;
+  })();
+
+  // ---------- Build DOM ----------
+  const docScroll = document.getElementById("doc-scroll");
+  const navList = document.getElementById("nav-list");
+  const infoBox = document.getElementById("info-box");
+  const infoPlaceholder = document.getElementById("info-placeholder");
+
+  let selectedEl = null;      // currently selected (clicked) element
+  let selectedData = null;    // { kind: 'section'|'bullet', title, info }
+  let hoverActive = false;    // whether a hover overlay is currently shown
+
+  sections.forEach(function (sec) {
+    const secEl = document.createElement("section");
+    secEl.className = "resume-section";
+    secEl.id = sec.id;
+
+    const h2 = document.createElement("h2");
+    h2.className = "section-title";
+    h2.textContent = sec.title;
+
+    const secHasInfo = !isNa(sec.hover);
+    h2.tabIndex = 0;
+    if (secHasInfo) {
+      h2.classList.add("clickable");
+    }
+    attachInteractions(h2, { kind: "section", title: sec.title, info: sec.hover, hasInfo: secHasInfo });
+    secEl.appendChild(h2);
+
+    const p = document.createElement("p");
+    p.className = "section-intro";
+    p.innerHTML = renderRich(sec.intro);
+    secEl.appendChild(p);
+
+    const ul = document.createElement("ul");
+    ul.className = "bullet-list";
+
+    sec.bullets.forEach(function (b) {
+      const li = document.createElement("li");
+
+      if (sec.isLinkList) {
+        // Plain external links: the bullet itself navigates away rather
+        // than being wired into the select/info-panel system.
+        li.classList.add("link-item");
+        const a = document.createElement("a");
+        a.href = b.href;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = b.text;
+        li.appendChild(a);
+        ul.appendChild(li);
+        return;
+      }
+
+      li.innerHTML = renderRich(b.text);
+      const bulletHasInfo = !isNa(b.info);
+      li.tabIndex = 0;
+      if (bulletHasInfo) {
+        li.classList.add("clickable");
+      }
+      attachInteractions(li, { kind: "bullet", title: b.text, info: b.info, hasInfo: bulletHasInfo });
+      ul.appendChild(li);
+    });
+
+    secEl.appendChild(ul);
+    docScroll.appendChild(secEl);
+
+    // Nav entry
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = "#" + sec.id;
+    a.textContent = sec.title;
+    a.dataset.target = sec.id;
+    a.addEventListener("click", function (evt) {
+      evt.preventDefault();
+      scrollSectionToTop(sec.id);
+    });
+    li.appendChild(a);
+    navList.appendChild(li);
+  });
+
+  function scrollSectionToTop(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const containerRect = docScroll.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const delta = targetRect.top - containerRect.top;
+    docScroll.scrollTo({
+      top: docScroll.scrollTop + delta,
+      behavior: "smooth"
+    });
+  }
+
+  // ---------- Interaction wiring ----------
+  function attachInteractions(el, data) {
+    el.addEventListener("click", function (evt) {
+      if (evt.target.closest("a")) return;   // let links inside text work normally
+      evt.stopPropagation();
+      selectItem(el, data);
+    });
+    if (data.hasInfo) {
+      el.addEventListener("mouseenter", function () {
+        showHoverMessage();
+      });
+      el.addEventListener("mouseleave", function () {
+        hideHoverMessage();
+      });
+      el.addEventListener("focus", function () {
+        showHoverMessage();
+      });
+      el.addEventListener("blur", function () {
+        hideHoverMessage();
+      });
+    }
+    el.addEventListener("keydown", function (evt) {
+      if (evt.key === "Enter" || evt.key === " ") {
+        evt.preventDefault();
+        selectItem(el, data);
+      }
+    });
+  }
+
+  // Touch devices have no hover, so the hover preview is skipped there.
+  const canHover = window.matchMedia("(hover: hover)");
+
+  function showHoverMessage() {
+    // While something is selected, keep showing its info — the hover
+    // preview only applies when nothing is currently selected.
+    if (selectedData || !canHover.matches) {
+      return;
+    }
+    hoverActive = true;
+    infoBox.classList.remove("has-info");
+    infoBox.innerHTML = '<div class="placeholder-msg hover-msg">' + escapeHtml(labels.hoverPrompt) + "</div>";
+  }
+
+  function hideHoverMessage() {
+    if (selectedData) {
+      return;
+    }
+    hoverActive = false;
+    renderEmptyState();
+  }
+
+  function selectItem(el, data) {
+    if (selectedEl === el) {
+      hoverActive = false;
+      clearSelection();
+      return;
+    }
+    if (selectedEl) {
+      selectedEl.classList.remove("selected");
+    }
+    selectedEl = el;
+    selectedData = data;
+    el.classList.add("selected");
+
+    // A click always shows this item's info (or the "no info" message),
+    // overriding any hover overlay that was showing at click time.
+    hoverActive = false;
+    renderSelectedInfo();
+  }
+
+  function clearSelection() {
+    if (selectedEl) {
+      selectedEl.classList.remove("selected");
+    }
+    selectedEl = null;
+    selectedData = null;
+    if (!hoverActive) {
+      renderEmptyState();
+    }
+  }
+
+  function renderEmptyState() {
+    infoBox.classList.remove("has-info");
+    infoBox.innerHTML = '<div class="placeholder-msg">' +
+      escapeHtml(canHover.matches ? labels.emptyMessageDesktop : labels.emptyMessageTouch) + "</div>";
+  }
+
+  function renderPlaceholderMessage(msg) {
+    infoBox.classList.remove("has-info");
+    infoBox.innerHTML = '<div class="placeholder-msg">' + escapeHtml(msg) + "</div>";
+  }
+
+  function renderSelectedInfo() {
+    if (!selectedData) {
+      renderEmptyState();
+      return;
+    }
+    if (!selectedData.hasInfo) {
+      infoBox.classList.remove("has-info");
+      infoBox.innerHTML = '<div class="placeholder-msg">' + escapeHtml(labels.noInfoMessage) + "</div>";
+      return;
+    }
+    infoBox.classList.add("has-info");
+    const html =
+      '<div class="info-content">' +
+        "<div>" + renderRich(selectedData.info) + "</div>" +
+      "</div>";
+    infoBox.innerHTML = html;
+  }
+
+  // Click outside the document (but still inside the page) clears selection.
+  document.addEventListener("click", function (evt) {
+    if (!docScroll.contains(evt.target)) {
+      clearSelection();
+    }
+  });
+
+  // Clicking inside the document but not on a clickable element also clears selection.
+  docScroll.addEventListener("click", function (evt) {
+    const isClickable = evt.target.closest(".clickable");
+    if (!isClickable) {
+      clearSelection();
+    }
+  });
+
+  // Clear selection if the selected element scrolls out of view.
+  let observer = null;
+  function watchSelectedVisibility(el) {
+    if (observer) {
+      observer.disconnect();
+    }
+    observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting && selectedEl === el) {
+          clearSelection();
+        }
+      });
+    }, { root: docScroll, threshold: 0 });
+    observer.observe(el);
+  }
+
+  const originalSelectItem = selectItem;
+  selectItem = function (el, data) {
+    originalSelectItem(el, data);
+    watchSelectedVisibility(el);
+  };
+
+  // ---------- Active nav highlighting on scroll ----------
+  const navLinks = Array.from(navList.querySelectorAll("a"));
+  const sectionEls = sections.map(function (s) { return document.getElementById(s.id); });
+
+  function updateActiveNav() {
+    const containerTop = docScroll.getBoundingClientRect().top;
+    let currentId = sectionEls[0].id;
+    for (let i = 0; i < sectionEls.length; i++) {
+      const rect = sectionEls[i].getBoundingClientRect();
+      if (rect.top - containerTop <= 24) {
+        currentId = sectionEls[i].id;
+      }
+    }
+    navLinks.forEach(function (a) {
+      a.classList.toggle("active", a.dataset.target === currentId);
+    });
+    keepActiveChipVisible(currentId);
+  }
+
+  // On phones the nav is a horizontal strip: keep the active chip in view.
+  const railNav = document.querySelector(".rail-nav");
+  let lastChipId = null;
+  function keepActiveChipVisible(id) {
+    if (id === lastChipId) return;
+    lastChipId = id;
+    if (railNav.scrollWidth <= railNav.clientWidth) return;
+    const chip = navLinks.find(function (a) { return a.dataset.target === id; });
+    if (!chip) return;
+    railNav.scrollTo({
+      left: chip.offsetLeft - (railNav.clientWidth - chip.offsetWidth) / 2,
+      behavior: "smooth"
+    });
+  }
+
+  docScroll.addEventListener("scroll", updateActiveNav, { passive: true });
+  // On phones the details panel is a footer fixed to the bottom of the screen
+  // and its height follows its text. Publish that height so the document can
+  // leave room for it, and keep the selected item from hiding behind it
+  // (otherwise it would count as scrolled away and be deselected).
+  const phoneLayout = window.matchMedia("(max-width: 600px)");
+  const footerEl = document.querySelector(".rail-info");
+  function syncFooter() {
+    if (!phoneLayout.matches) return;
+    document.documentElement.style.setProperty("--footer-h", footerEl.offsetHeight + "px");
+    if (selectedEl) {
+      const overflow = selectedEl.getBoundingClientRect().bottom -
+                       footerEl.getBoundingClientRect().top;
+      if (overflow > 0) {
+        docScroll.scrollTop += overflow + 8;
+      }
+    }
+  }
+  const footerRO = new ResizeObserver(syncFooter);
+  footerRO.observe(footerEl);
+  footerRO.observe(document.querySelector("header.page-header"));
+  syncFooter();
+
+  // ---------- Name toggle (collapsible bio) ----------
+  const bioToggle = document.getElementById("bio-toggle");
+  const bioPanel = document.getElementById("bio-panel");
+  function setBio(open) {
+    bioToggle.setAttribute("aria-expanded", String(open));
+    bioPanel.classList.toggle("open", open);
+  }
+
+  // Auto-close 10 seconds after the page loads. Any manual toggle cancels it,
+  // so the page never fights the visitor.
+  const BIO_AUTO_CLOSE_MS = 10000;
+  const bioTri = bioToggle.querySelector(".tri-wrap");
+  const bioAutoClose = setTimeout(function () {
+    setBio(false);
+    bioTri.classList.add("blink");          // 3s blink to signal it can be reopened
+  }, BIO_AUTO_CLOSE_MS);
+
+  bioTri.addEventListener("animationend", function () {
+    bioTri.classList.remove("blink");
+  });
+
+  bioToggle.addEventListener("click", function () {
+    clearTimeout(bioAutoClose);
+    bioTri.classList.remove("blink");
+    setBio(bioToggle.getAttribute("aria-expanded") !== "true");
+  });
+
+  // ---------- Tabs: Job Specific Qualifications / Traditional CV ----------
+  // The CV tab lives at #cv so the browser/phone Back button switches tabs.
+  const cvView = document.getElementById("cv-view");
+  const tabMain = document.getElementById("tab-main");
+  const tabCv = document.getElementById("tab-cv");
+  let savedDocScroll = 0;
+
+  function syncTabs() {
+    const wantCv = window.location.hash === "#cv";
+    const isCv = document.body.classList.contains("cv-mode");
+    if (wantCv && !isCv) {
+      savedDocScroll = docScroll.scrollTop;
+      clearSelection();
+      document.body.classList.add("cv-mode");
+      cvView.scrollTop = 0;
+    } else if (!wantCv && isCv) {
+      document.body.classList.remove("cv-mode");
+      docScroll.scrollTop = savedDocScroll;
+    }
+    tabMain.setAttribute("aria-selected", String(!wantCv));
+    tabCv.setAttribute("aria-selected", String(wantCv));
+    tabMain.tabIndex = wantCv ? -1 : 0;
+    tabCv.tabIndex = wantCv ? 0 : -1;
+  }
+
+  function showTab(name) {
+    const onCv = window.location.hash === "#cv";
+    if (name === "cv" && !onCv) {
+      window.location.hash = "cv";              // pushes a history entry -> hashchange
+    } else if (name === "main" && onCv) {
+      try {
+        history.pushState(null, "", window.location.pathname + window.location.search);
+      } catch (e) {
+        window.location.hash = "";
+      }
+      syncTabs();
+    }
+  }
+
+  tabMain.addEventListener("click", function () { showTab("main"); });
+  tabCv.addEventListener("click", function () { showTab("cv"); });
+  document.querySelector(".tabbar").addEventListener("keydown", function (evt) {
+    if (evt.key === "ArrowRight" || evt.key === "ArrowLeft") {
+      evt.preventDefault();
+      const goCv = window.location.hash !== "#cv";
+      showTab(goCv ? "cv" : "main");
+      (goCv ? tabCv : tabMain).focus();
+    }
+  });
+
+  window.addEventListener("hashchange", syncTabs);
+  window.addEventListener("popstate", syncTabs);
+  syncTabs();
+
+  renderEmptyState();
+  updateActiveNav();
+})();
+</script>
+</body>
+</html>
