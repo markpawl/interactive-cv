@@ -21,6 +21,7 @@ Hosted as a static site on Vercel. No framework, no build step, no dependencies,
 |---|---|
 | `index.html` | Entire app: HTML + CSS + JS in one file. Builds the main tab from the JSON at load. |
 | `resume-content.json` | **All text of the main tab** (header, tab labels, messages, sections). The file the user edits most. |
+| `config.js` | Site-behavior settings (not content), e.g. the bio auto-close delay. Plain `window.X = …` assignments, loaded before the main script. |
 | `mp-traditional-cv.pdf` | Downloadable CV, linked from the Traditional CV tab (relative link, must sit next to `index.html`). |
 | `CLAUDE.md` | This file. |
 
@@ -102,8 +103,11 @@ Rules:
 - The name is an `<h1>` containing a toggle `<button>`: a triangle inside a **borderless circle** (light gray background) before the name.
   Points **right** when collapsed, **down** when expanded (aria-expanded drives the rotation).
 - The collapsible section holds, in order: tagline, contact row (items separated by `·`), status line. It is **open by default**.
-- **Auto-close 10 s after page load** (`BIO_AUTO_CLOSE_MS`). Any manual click on the toggle cancels the timer permanently.
-- After an *auto*-close only, the circle's background **blinks for 3 s** (5 × 0.6 s) to hint that it can be reopened. Manual closes do not blink.
+- **Auto-close delay is configurable** via `config.js` → `window.BIO_AUTO_CLOSE_SECONDS` (default `10`). `-1` disables auto-close
+  entirely (bio stays open until manually closed); `0` closes immediately on load; any positive number is a countdown in seconds.
+  Any manual click on the toggle cancels the pending auto-close permanently.
+- After an *auto*-close only (never when disabled via `-1`, and never relevant at `0` since nothing to blink yet), the circle's
+  background **blinks for 3 s** (5 × 0.6 s) to hint that it can be reopened. Manual closes do not blink.
   `prefers-reduced-motion` disables the blink (the user may not see it because of that setting; see follow-ups).
 - LinkedIn/GitHub are intentionally **not** in the header; they live in the Websites section.
 - Header tooltip was removed; the tagline is shown in the collapsible section instead.
@@ -183,7 +187,8 @@ Test at **1280×800** and at **390×844 touch/mobile** (Playwright + Chromium wo
 1. Page renders all sections in `sectionOrder`, no red banner, no console errors, no horizontal scroll.
 2. Nav click scrolls the section to the top; active nav item follows scrolling.
 3. Selection rules in §5 (hover prompt, click, "no extra information", toggle off, click-away, scroll-out, links inside text).
-4. Header toggle: default open, triangle direction, auto-close at 10 s, manual click cancels it, blink only after auto-close.
+4. Header toggle: default open, triangle direction, auto-close at the configured delay (`config.js`), manual click cancels it,
+   blink only after auto-close; also check `-1` (stays open) and `0` (closes immediately) in `config.js`.
 5. Tabs: switch by click, Back/Forward, `…/#cv` deep link, scroll restored on return.
 6. Phone: footer's bottom edge equals the viewport height at every scroll position; selected item never hides behind it.
 7. Error paths: missing JSON (404), syntax error (line number shown), missing `title`, unknown id in `sectionOrder`, `links` bullet without `url`.

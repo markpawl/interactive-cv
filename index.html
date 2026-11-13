@@ -890,6 +890,8 @@
 </div>
 
 <!-- Page text lives in resume-content.json (same folder as this file). Edit that file, not this one. -->
+<!-- Site-behavior settings (not content) live in config.js, next to this file. -->
+<script src="config.js"></script>
 <script>
 (async function () {
   "use strict";
@@ -1385,14 +1387,20 @@
     bioPanel.classList.toggle("open", open);
   }
 
-  // Auto-close 10 seconds after the page loads. Any manual toggle cancels it,
-  // so the page never fights the visitor.
-  const BIO_AUTO_CLOSE_MS = 10000;
+  // Auto-close delay comes from config.js (BIO_AUTO_CLOSE_SECONDS): -1 disables
+  // auto-close, 0 closes immediately, >0 is a countdown in seconds. Any manual
+  // toggle cancels the pending auto-close, so the page never fights the visitor.
+  const bioAutoCloseSeconds = typeof window.BIO_AUTO_CLOSE_SECONDS === "number"
+    ? window.BIO_AUTO_CLOSE_SECONDS
+    : 10;
   const bioTri = bioToggle.querySelector(".tri-wrap");
-  const bioAutoClose = setTimeout(function () {
-    setBio(false);
-    bioTri.classList.add("blink");          // 3s blink to signal it can be reopened
-  }, BIO_AUTO_CLOSE_MS);
+  let bioAutoClose = null;
+  if (bioAutoCloseSeconds >= 0) {
+    bioAutoClose = setTimeout(function () {
+      setBio(false);
+      bioTri.classList.add("blink");        // 3s blink to signal it can be reopened
+    }, bioAutoCloseSeconds * 1000);
+  }
 
   bioTri.addEventListener("animationend", function () {
     bioTri.classList.remove("blink");
